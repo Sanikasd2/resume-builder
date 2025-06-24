@@ -1,0 +1,99 @@
+def get_user_input(prompt):
+    """Gets string input from the user."""
+    return input(prompt).strip()
+
+def get_list_input(prompt_singular, prompt_done_indicator):
+    """Gets a list of items from the user until 'done' is entered."""
+    items = []
+    while True:
+        item = get_user_input(f"{prompt_singular} (or type '{prompt_done_indicator}' to finish): ")
+        if item.lower() == prompt_done_indicator.lower():
+            break
+        items.append(item)
+    return items
+
+def build_resume():
+    """Collects resume information and prints it."""
+    print("--- Resume Builder ---")
+
+    # Personal Information
+    name = get_user_input("Enter your full name: ")
+    email = get_user_input("Enter your email address: ")
+    phone = get_user_input("Enter your phone number: ")
+    linkedin = get_user_input("Enter your LinkedIn profile URL (optional): ")
+
+    # Summary/Objective
+    summary = get_user_input("Enter your professional summary or objective: ")
+
+    # Education
+    print("\n--- Education ---")
+    education_entries = []
+    while True:
+        degree = get_user_input("Enter your degree/qualification (or type 'done' to finish education): ")
+        if degree.lower() == 'done':
+            break
+        institution = get_user_input("Enter the institution name: ")
+        graduation_year = get_user_input("Enter your graduation year: ")
+        education_entries.append({'degree': degree, 'institution': institution, 'year': graduation_year})
+
+    # Experience
+    print("\n--- Experience ---")
+    experience_entries = []
+    while True:
+        job_title = get_user_input("Enter your job title (or type 'done' to finish experience): ")
+        if job_title.lower() == 'done':
+            break
+        company = get_user_input("Enter the company name: ")
+        duration = get_user_input("Enter the duration (e.g., Jan 2020 - Dec 2022): ")
+        responsibilities = get_list_input("Enter a key responsibility", "done")
+        experience_entries.append({'title': job_title, 'company': company, 'duration': duration, 'responsibilities': responsibilities})
+
+    # Skills
+    print("\n--- Skills ---")
+    skills = get_user_input("Enter your key skills (comma-separated): ").split(',')
+    skills = [s.strip() for s in skills if s.strip()] # Clean and remove empty entries
+
+    # Projects (Optional)
+    print("\n--- Projects (Optional) ---")
+    project_entries = []
+    while True:
+        project_name = get_user_input("Enter project name (or type 'done' to finish projects): ")
+        if project_name.lower() == 'done':
+            break
+        project_description = get_user_input("Enter a brief description for this project: ")
+        project_entries.append({'name': project_name, 'description': project_description})
+
+    # Print the collected resume information
+    print("\n--- Generated Resume ---")
+    print(f"Name: {name}")
+    print(f"Email: {email}")
+    print(f"Phone: {phone}")
+    if linkedin:
+        print(f"LinkedIn: {linkedin}")
+
+    print("\nSummary:")
+    print(summary)
+
+    if education_entries:
+        print("\nEducation:")
+        for edu in education_entries:
+            print(f"- {edu['degree']} from {edu['institution']} ({edu['year']})")
+
+    if experience_entries:
+        print("\nExperience:")
+        for exp in experience_entries:
+            print(f"- {exp['title']} at {exp['company']} ({exp['duration']})")
+            for resp in exp['responsibilities']:
+                print(f"  - {resp}")
+
+    if skills:
+        print("\nSkills:")
+        print(", ".join(skills))
+
+    if project_entries:
+        print("\nProjects:")
+        for proj in project_entries:
+            print(f"- {proj['name']}: {proj['description']}")
+
+if __name__ == "__main__":
+    build_resume()
